@@ -24,17 +24,17 @@ if [[ ! -e /usr/bin/convert ]]; then
     exit 1
 fi
 
-MAGICK_BASE_DIR="$HOME/vendor/imagemagick"
-MAGICK_DIR="$HOME/vendor/imagemagick/etc"
+MAGICK_BASE_DIR="vendor/imagemagick"
+MAGICK_DIR="$MAGICK_BASE_DIR/etc"
 
-if [[ -e "$MAGICK_DIR" ]]; then
+if [[ -e "$BUILD_DIR/$MAGICK_DIR" ]]; then
     echo "-----> Not writing out policy.xml, since \$MAGICK_DIR already exists";
     exit 0
 fi
 
-mkdir -p "$MAGICK_DIR"
+mkdir -p "$BUILD_DIR/$MAGICK_DIR"
 echo "-----> Writing policy.xml to $MAGICK_DIR/policy.xml"
-cat >"$MAGICK_DIR/policy.xml" <<EOF
+cat >"$BUILD_DIR/$MAGICK_DIR/policy.xml" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policymap [
   <!ELEMENT policymap (policy)*>
@@ -65,4 +65,4 @@ echo "-----> Updating environment variables"
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick.sh"
 mkdir -p "$(dirname "$PROFILE_PATH")"
-echo "export MAGICK_CONFIGURE_PATH=$MAGICK_DIR" >> "$PROFILE_PATH"
+echo "export MAGICK_CONFIGURE_PATH=$HOME/$MAGICK_DIR" >> "$PROFILE_PATH"
