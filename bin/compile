@@ -24,15 +24,16 @@ if [[ ! -e /usr/bin/convert ]]; then
     exit 1
 fi
 
-MAGICK_DIR="$BUILD_DIR/.magick"
+MAGICK_BASE_DIR="$HOME/vendor/imagemagick"
+MAGICK_DIR="$HOME/vendor/imagemagick/etc"
 
 if [[ -e "$MAGICK_DIR" ]]; then
     echo "-----> Not writing out policy.xml, since \$MAGICK_DIR already exists";
     exit 0
 fi
 
-mkdir "$MAGICK_DIR"
-echo "-----> Writing policy.xml to .magick/policy.xml"
+mkdir -p "$MAGICK_DIR"
+echo "-----> Writing policy.xml to $MAGICK_DIR/policy.xml"
 cat >"$MAGICK_DIR/policy.xml" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policymap [
