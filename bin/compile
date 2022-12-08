@@ -2,9 +2,9 @@
 
 set -euo pipefail
 
-BUILD_DIR=$1
-CACHE_DIR=$2
-ENV_DIR=$3
+BUILD_DIR="$1"
+# CACHE_DIR="$2"
+# ENV_DIR="$3"
 
 case "$STACK" in
     "heroku-18")
@@ -32,6 +32,7 @@ if [[ -e "$MAGICK_DIR" ]]; then
 fi
 
 mkdir "$MAGICK_DIR"
+echo "-----> Writing policy.xml to .magick/policy.xml"
 cat >"$MAGICK_DIR/policy.xml" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE policymap [
@@ -62,5 +63,5 @@ chmod 0644 "$MAGICK_DIR/policy.xml"
 echo "-----> Updating environment variables"
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/imagemagick.sh"
-mkdir -p $(dirname $PROFILE_PATH)
+mkdir -p "$(dirname "$PROFILE_PATH")"
 echo "export MAGICK_CONFIGURE_PATH=$MAGICK_DIR" >> "$PROFILE_PATH"
