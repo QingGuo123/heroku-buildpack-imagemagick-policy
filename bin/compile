@@ -59,7 +59,7 @@ cat >"$BUILD_DIR/$MAGICK_DIR/policy.xml" <<EOF
 </policymap>
 EOF
 
-chmod 0644 "$MAGICK_DIR/policy.xml"
+chmod 0644 "$BUILD_DIR/$MAGICK_DIR/policy.xml"
 
 echo "-----> Updating environment variables"
 
