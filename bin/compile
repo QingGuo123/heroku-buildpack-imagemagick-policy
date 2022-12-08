@@ -1,0 +1,49 @@
+#!/bin/bash
+
+set -euo pipefail
+
+case "$STACK" in
+    "heroku-18")
+        ;;
+    "heroku-20")
+        ;;
+    "heroku-22")
+        ;;
+    *)
+        echo >&2 "Unhandled stack $STACK"
+        exit 1
+        ;;
+esac
+
+if [[ ! -e /usr/bin/convert ]]; then
+    echo >&2 "ImageMagick not installed!"
+    exit 1
+fi
+
+echo "-----> Writing out policy.xml"
+cat >/etc/ImageMagick-6/policy.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policymap [
+  <!ELEMENT policymap (policy)*>
+  <!ATTLIST policymap xmlns CDATA #FIXED ''>
+  <!ELEMENT policy EMPTY>
+  <!ATTLIST policy xmlns CDATA #FIXED '' domain NMTOKEN #REQUIRED
+    name NMTOKEN #IMPLIED pattern CDATA #IMPLIED rights NMTOKEN #IMPLIED
+    stealth NMTOKEN #IMPLIED value CDATA #IMPLIED>
+]>
+<policymap>
+  <policy domain="resource" name="memory" value="512MiB"/>
+  <policy domain="resource" name="map" value="1024MiB"/>
+  <policy domain="resource" name="width" value="16KP"/>
+  <policy domain="resource" name="height" value="16KP"/>
+  <policy domain="resource" name="area" value="20MP"/>
+  <policy domain="resource" name="disk" value="10MiB"/>
+  <policy domain="delegate" rights="none" pattern="URL" />
+  <policy domain="delegate" rights="none" pattern="HTTPS" />
+  <policy domain="delegate" rights="none" pattern="HTTP" />
+  <policy domain="coder" rights="read | write" pattern="PDF" />
+  <policy domain="path" rights="none" pattern="@*"/>
+</policymap>
+EOF
+
+chmod 0644 /etc/ImageMagick-6/policy.xml
